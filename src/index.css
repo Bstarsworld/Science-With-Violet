@@ -1,0 +1,240 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Kapsalon';
+  src: url('/fonts/Kapsalon.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Kapsalon Print';
+  src: url('/fonts/KapsalonPrint.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@layer base {
+  body {
+    font-family: 'Fredoka', 'Nunito', system-ui, -apple-system, sans-serif;
+    user-select: none;
+    background: radial-gradient(circle at 50% 30%, #b388eb 0%, #9066cc 35%, #7645b8 70%, #5b2d99 100%);
+    color: #ffffff;
+    overflow: hidden;
+    height: 100vh;
+    width: 100vw;
+  }
+}
+
+/* 3D Extruded Bubbly Hero Title Style with Kapsalon font */
+.title-3d {
+  font-family: 'Kapsalon', 'Titan One', 'Fredoka', cursive, sans-serif;
+  letter-spacing: 0.03em;
+  background: linear-gradient(180deg, #ffffff 0%, #ffd4f4 25%, #f472b6 55%, #c026d3 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  /* Multi-layered 3D shadow extrusion */
+  filter: drop-shadow(0 2px 0 #86198f) 
+          drop-shadow(0 4px 0 #701a75) 
+          drop-shadow(0 6.5px 0 #4a044e) 
+          drop-shadow(0 9px 12px rgba(45, 0, 60, 0.45));
+}
+
+.title-3d-stroke {
+  -webkit-text-stroke: 4px #ffffff;
+}
+
+/* Subtitle style */
+.subtitle-glow {
+  font-family: 'Titan One', 'Fredoka', cursive, sans-serif;
+  color: #3b0764;
+  text-shadow: 
+    0 2px 0 rgba(255, 255, 255, 0.9),
+    0 -1px 0 rgba(255, 255, 255, 0.8),
+    1px 0 0 rgba(255, 255, 255, 0.8),
+    -1px 0 0 rgba(255, 255, 255, 0.8),
+    0 4px 10px rgba(59, 7, 100, 0.25);
+}
+
+/* Glassmorphic Nav Buttons */
+.nav-pill {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(240, 215, 255, 0.4) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 4px 15px rgba(112, 26, 117, 0.2), inset 0 2px 4px rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(12px);
+  color: #581c87;
+  font-family: 'Titan One', 'Fredoka', cursive, sans-serif;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-pill:hover {
+  transform: translateY(-2px) scale(1.04);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(245, 225, 255, 0.65) 100%);
+  box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4), inset 0 2px 6px rgba(255, 255, 255, 0.9);
+  color: #3b0764;
+}
+
+.nav-pill:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* Ribbon Banner under title */
+.ribbon-banner {
+  background: linear-gradient(180deg, #f5d0fe 0%, #e879f9 50%, #c084fc 100%);
+  border: 2px solid #ffffff;
+  box-shadow: 0 4px 12px rgba(112, 26, 117, 0.3), inset 0 1px 3px rgba(255, 255, 255, 0.8);
+  position: relative;
+}
+
+/* Cool Spin Animations for Planets and Website Assets */
+@keyframes spinClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes spinCounterClockwise {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes spinBounce3D {
+  0% {
+    transform: perspective(400px) rotateY(0deg) scale(1);
+  }
+  50% {
+    transform: perspective(400px) rotateY(180deg) scale(1.18);
+  }
+  100% {
+    transform: perspective(400px) rotateY(360deg) scale(1);
+  }
+}
+
+@keyframes planetWobbleSpin {
+  0% {
+    transform: rotate(0deg) scale(1);
+  }
+  25% {
+    transform: rotate(90deg) scale(1.12) skewX(2deg);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.18) skewY(2deg);
+  }
+  75% {
+    transform: rotate(270deg) scale(1.12) skewX(-2deg);
+  }
+  100% {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+.spin-slow {
+  animation: spinClockwise 12s linear infinite;
+}
+
+.spin-medium {
+  animation: spinClockwise 6s linear infinite;
+}
+
+.spin-fast {
+  animation: spinClockwise 2.5s linear infinite;
+}
+
+/* On-hover spin classes for UI assets */
+.hover-spin {
+  transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-spin:hover {
+  transform: rotate(360deg) scale(1.15);
+}
+
+.hover-spin-reverse {
+  transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-spin-reverse:hover {
+  transform: rotate(-360deg) scale(1.15);
+}
+
+.hover-spin-3d {
+  transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-spin-3d:hover {
+  animation: spinBounce3D 0.85s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hover-wobble-spin:hover {
+  animation: planetWobbleSpin 0.9s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Floating animation */
+@keyframes softFloat {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  50% {
+    transform: translateY(-8px) rotate(0.5deg);
+  }
+}
+
+.animate-soft-float {
+  animation: softFloat 4s ease-in-out infinite;
+}
+
+/* Cloud drift animations */
+@keyframes driftLeft {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(-25px); }
+  100% { transform: translateX(0); }
+}
+
+@keyframes driftRight {
+  0% { transform: translateX(0); }
+  50% { transform: translateX(30px); }
+  100% { transform: translateX(0); }
+}
+
+.drift-left {
+  animation: driftLeft 18s ease-in-out infinite;
+}
+
+.drift-right {
+  animation: driftRight 22s ease-in-out infinite;
+}
+
+/* Star twinkle */
+@keyframes twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(0.8); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+
+.star-twinkle {
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+/* Custom Scrollbar for modals */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(192, 132, 252, 0.6);
+  border-radius: 8px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(232, 121, 249, 0.8);
+}

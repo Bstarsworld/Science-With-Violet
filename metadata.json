@@ -1,0 +1,6 @@
+{
+  "name": "Science with Violet",
+  "description": "An interactive, whimsical 3D WebGL cosmic learning adventure with Violet, orbiting exploration nodes, and playful science discoveries.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
