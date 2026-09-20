@@ -11,6 +11,9 @@ interface AboutContactModalProps {
 export const AboutContactModal: React.FC<AboutContactModalProps> = ({ type, onClose }) => {
   const [sentMessage, setSentMessage] = useState(false);
   const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+  const [lastMailtoUrl, setLastMailtoUrl] = useState('');
+
+  const TARGET_EMAIL = 'info@intrepidmediagiant.com';
 
   const handleSend = (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,10 +23,21 @@ export const AboutContactModal: React.FC<AboutContactModalProps> = ({ type, onCl
       spread: 60,
       origin: { y: 0.6 },
     });
+
+    const subject = encodeURIComponent(`Science with Violet: Note from ${formData.name}`);
+    const body = encodeURIComponent(
+      `Hello Violet & The Lab Team!\n\nExplorer Name: ${formData.name}\nParent/Contact Email: ${formData.email}\n\nDiscovery / Message:\n${formData.message}\n\n-- Sent from Science With Violet --`
+    );
+    const mailtoUrl = `mailto:${TARGET_EMAIL}?subject=${subject}&body=${body}`;
+    setLastMailtoUrl(mailtoUrl);
     setSentMessage(true);
-    setTimeout(() => {
-      onClose();
-    }, 2000);
+
+    // Launch mail client
+    try {
+      window.location.href = mailtoUrl;
+    } catch {
+      // Fallback if blocked
+    }
   };
 
   return (
@@ -96,15 +110,48 @@ export const AboutContactModal: React.FC<AboutContactModalProps> = ({ type, onCl
           ) : (
             <>
               {sentMessage ? (
-                <div className="py-8 text-center space-y-3">
-                  <CheckCircle className="w-16 h-16 text-green-500 mx-auto animate-bounce" />
-                  <h3 className="font-['Titan_One'] text-xl text-purple-900">Message Transmitted!</h3>
-                  <p className="text-xs text-purple-700 font-medium">
-                    Violet's laboratory receiver has received your message! Keep discovering!
+                <div className="py-6 text-center space-y-3">
+                  <CheckCircle className="w-14 h-14 text-green-500 mx-auto animate-bounce" />
+                  <h3 className="font-['Titan_One'] text-xl text-purple-900">Email Beamed to the Lab!</h3>
+                  <p className="text-xs text-purple-700 font-medium max-w-sm mx-auto leading-relaxed">
+                    Your message has been pre-addressed to <strong className="text-purple-900 font-bold">info@intrepidmediagiant.com</strong>.
                   </p>
+                  <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-2">
+                    {lastMailtoUrl && (
+                      <a
+                        href={lastMailtoUrl}
+                        className="px-4 py-2 rounded-full font-['Titan_One'] text-xs uppercase bg-purple-600 hover:bg-purple-700 text-white shadow transition-transform hover:scale-105 inline-flex items-center gap-1.5"
+                      >
+                        <Mail className="w-3.5 h-3.5" />
+                        Re-open Email App
+                      </a>
+                    )}
+                    <button
+                      onClick={() => {
+                        setSentMessage(false);
+                        setFormData({ name: '', email: '', message: '' });
+                      }}
+                      className="px-4 py-2 rounded-full font-['Titan_One'] text-xs uppercase bg-purple-100 hover:bg-purple-200 text-purple-900 transition-colors"
+                    >
+                      Send Another Note
+                    </button>
+                  </div>
                 </div>
               ) : (
                 <form onSubmit={handleSend} className="space-y-3">
+                  <div className="flex items-center justify-between text-[11px] text-purple-600 bg-purple-50 px-3 py-1.5 rounded-xl border border-purple-200/80">
+                    <span className="font-bold flex items-center gap-1">
+                      <Mail className="w-3.5 h-3.5 text-purple-500" />
+                      Direct to Lab Inbox:
+                    </span>
+                    <a
+                      href={`mailto:${TARGET_EMAIL}`}
+                      className="font-extrabold text-purple-800 hover:underline"
+                    >
+                      {TARGET_EMAIL}
+                    </a>
+                  </div>
+
                   <div>
                     <label className="block text-xs font-bold text-purple-800 mb-1">Junior Scientist Name:</label>
                     <input
@@ -143,7 +190,7 @@ export const AboutContactModal: React.FC<AboutContactModalProps> = ({ type, onCl
                     className="w-full py-2.5 rounded-full font-['Titan_One'] text-xs uppercase tracking-wider bg-gradient-to-r from-pink-500 to-purple-600 text-white shadow-md cursor-pointer hover:scale-[1.02] active:scale-[0.98] transition-transform flex items-center justify-center gap-1.5"
                   >
                     <Send className="w-3.5 h-3.5" />
-                    Beam Message to Orbit
+                    Beam Message to info@intrepidmediagiant.com
                   </button>
                 </form>
               )}
