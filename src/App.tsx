@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import confetti from 'canvas-confetti';
 import { CosmicBackground } from './components/CosmicBackground';
 import { ThreeCanvas } from './components/ThreeCanvas';
@@ -15,7 +15,7 @@ import { ArcadeModal } from './components/ArcadeModal';
 import { VideosModal } from './components/VideosModal';
 import { SCIENCE_NODES } from './data/scienceData';
 import { ScienceNodeData, ActiveModal } from './types';
-import { soundFx } from './utils/audio';
+import { soundFx, bgMusic } from './utils/audio';
 import { Sparkles, MessageCircle, RefreshCw, Gamepad2, Play, Film } from 'lucide-react';
 
 export default function App() {
@@ -25,6 +25,11 @@ export default function App() {
   const [violetGreeting, setVioletGreeting] = useState<string | null>(
     'Hi, young scientist! Click the "VIDEOS" planet to watch experiments, or tap orbiting worlds & games!'
   );
+
+  useEffect(() => {
+    // Start looping background music on mount (or first interaction)
+    bgMusic.start();
+  }, []);
 
   const handleSelectNode = (node: ScienceNodeData) => {
     console.log(`Clicked node: ${node.title}`);
@@ -41,10 +46,19 @@ export default function App() {
       colors: ['#ef4444', '#f43f5e', '#ec4899', '#fde047', '#38bdf8'],
     });
     setIsVideoWarping(true);
+    // Pause background music while watching YouTube videos
+    bgMusic.pause();
     setTimeout(() => {
       setIsVideoWarping(false);
       setActiveModal({ type: 'videos' });
     }, 420);
+  };
+
+  const handleCloseVideos = () => {
+    setActiveModal(null);
+    if (soundEnabled) {
+      bgMusic.start();
+    }
   };
 
   const handleVioletClick = () => {
@@ -71,6 +85,7 @@ export default function App() {
     const next = !soundEnabled;
     setSoundEnabled(next);
     soundFx.enabled = next;
+    bgMusic.setEnabled(next);
   };
 
   return (
@@ -250,7 +265,7 @@ export default function App() {
       {/* 5. Active Modals */}
       {activeModal && activeModal.type === 'videos' && (
         <VideosModal
-          onClose={() => setActiveModal(null)}
+          onClose={handleCloseVideos}
         />
       )}
 

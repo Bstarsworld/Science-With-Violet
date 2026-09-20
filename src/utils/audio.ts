@@ -238,4 +238,122 @@ class SoundEffectsManager {
   }
 }
 
+class BackgroundMusicManager {
+  private audio: HTMLAudioElement | null = null;
+  public isPlaying: boolean = false;
+  public enabled: boolean = true;
+  private volume: number = 0.4;
+  private listenersAttached: boolean = false;
+
+  constructor() {
+    if (typeof window !== 'undefined') {
+      this.initAudio();
+    }
+  }
+
+  private initAudio() {
+    if (this.audio) return;
+    try {
+      this.audio = new Audio('/theme.mp3');
+      this.audio.loop = true;
+      this.audio.volume = this.volume;
+      this.audio.preload = 'auto';
+
+      this.audio.onerror = () => {
+        // Fallback to /audio/science-theme.mp3 if needed
+        if (this.audio && !this.audio.src.includes('science-theme.mp3')) {
+          this.audio.src = '/audio/science-theme.mp3';
+          if (this.enabled && this.isPlaying) {
+            this.audio.play().catch(() => {});
+          }
+        }
+      };
+
+      this.audio.onplay = () => {
+        this.isPlaying = true;
+      };
+
+      this.audio.onpause = () => {
+        this.isPlaying = false;
+      };
+    } catch {
+      // Audio element initialization might fail in non-browser environments
+    }
+  }
+
+  public start() {
+    if (!this.enabled) return;
+    this.initAudio();
+    if (!this.audio) return;
+
+    this.audio.volume = this.volume;
+    const playPromise = this.audio.play();
+
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          this.isPlaying = true;
+        })
+        .catch(() => {
+          // Autoplay restricted until user interaction
+          if (!this.listenersAttached && typeof window !== 'undefined') {
+            this.listenersAttached = true;
+            const unlock = () => {
+              if (this.enabled && this.audio) {
+                this.audio.play().then(() => {
+                  this.isPlaying = true;
+                }).catch(() => {});
+              }
+              window.removeEventListener('pointerdown', unlock);
+              window.removeEventListener('keydown', unlock);
+              window.removeEventListener('touchstart', unlock);
+            };
+            window.addEventListener('pointerdown', unlock, { once: true });
+            window.addEventListener('keydown', unlock, { once: true });
+            window.addEventListener('touchstart', unlock, { once: true });
+          }
+        });
+    }
+  }
+
+  public pause() {
+    if (this.audio) {
+      this.audio.pause();
+      this.isPlaying = false;
+    }
+  }
+
+  public toggle() {
+    if (this.isPlaying) {
+      this.enabled = false;
+      this.pause();
+    } else {
+      this.enabled = true;
+      this.start();
+    }
+    return this.isPlaying;
+  }
+
+  public setEnabled(enabled: boolean) {
+    this.enabled = enabled;
+    if (enabled) {
+      this.start();
+    } else {
+      this.pause();
+    }
+  }
+
+  public setVolume(vol: number) {
+    this.volume = Math.max(0, Math.min(1, vol));
+    if (this.audio) {
+      this.audio.volume = this.volume;
+    }
+  }
+
+  public getVolume() {
+    return this.volume;
+  }
+}
+
 export const soundFx = new SoundEffectsManager();
+export const bgMusic = new BackgroundMusicManager();

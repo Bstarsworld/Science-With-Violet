@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, Volume2, VolumeX, Sparkles, Orbit, Compass, Mail, Gamepad2, Play } from 'lucide-react';
+import { Search, Volume2, VolumeX, Sparkles, Orbit, Compass, Mail, Gamepad2, Play, Music } from 'lucide-react';
 import { soundFx } from '../utils/audio';
 import { SCIENCE_NODES } from '../data/scienceData';
 import { ScienceNodeData } from '../types';
@@ -108,20 +108,30 @@ export const TopNav: React.FC<TopNavProps> = ({
 
       {/* Right Controls: Search Bar & Sound Toggle */}
       <div className="flex items-center gap-2 sm:gap-3">
-        {/* Sound Toggle Button with 360 spin */}
+        {/* Sound & Music Toggle Button with Equalizer */}
         <button
           id="nav-sound-btn"
           onClick={() => {
             onToggleSound();
             soundFx.playPop(0.9);
           }}
-          title={soundEnabled ? 'Mute Sound FX' : 'Enable Sound FX'}
-          className="nav-pill group w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center cursor-pointer transition-transform"
+          title={soundEnabled ? 'Mute Background Music & Sound FX' : 'Enable Background Music & Sound FX'}
+          className="nav-pill group h-9 sm:h-10 px-2 sm:px-2.5 rounded-full flex items-center gap-1.5 cursor-pointer transition-transform hover:scale-105 shadow-sm"
         >
           {soundEnabled ? (
-            <Volume2 className="w-4 h-4 text-purple-800 transition-transform duration-500 group-hover:rotate-[360deg] group-hover:scale-125" />
+            <>
+              <Volume2 className="w-4 h-4 text-purple-800 transition-transform duration-500 group-hover:rotate-[360deg] group-hover:scale-110" />
+              <div className="flex items-end gap-0.5 h-3.5 pr-0.5">
+                <span className="w-1 bg-pink-500 rounded-full animate-pulse h-2.5"></span>
+                <span className="w-1 bg-purple-600 rounded-full animate-pulse h-3.5 delay-75"></span>
+                <span className="w-1 bg-cyan-400 rounded-full animate-pulse h-2 delay-150"></span>
+              </div>
+            </>
           ) : (
-            <VolumeX className="w-4 h-4 text-purple-400 transition-transform duration-500 group-hover:rotate-[360deg] group-hover:scale-125" />
+            <>
+              <VolumeX className="w-4 h-4 text-purple-400 transition-transform duration-500 group-hover:rotate-[360deg] group-hover:scale-110" />
+              <span className="text-[10px] font-bold text-purple-400 uppercase hidden sm:inline">Muted</span>
+            </>
           )}
         </button>
 
